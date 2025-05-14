@@ -14,9 +14,24 @@ const nextConfig = {
   generateBuildId: async () => {
     return 'build-' + new Date().getTime()
   },
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
+  webpack: (config, { isServer }) => {
+    // Добавляем внешние зависимости
+    config.externals = [...(config.externals || []), {
+      'react': 'React',
+      'react-dom': 'ReactDOM',
+      'date-fns': 'dateFns'
+    }];
+
+    // Добавляем fallback для node модулей
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      path: false,
+      crypto: false
+    };
+
+    return config;
+  }
 }
 
 export default nextConfig
