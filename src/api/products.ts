@@ -2,15 +2,17 @@ export interface Product {
   id: string;
   name: string;
   description: string;
+  photo?: string;
   category: string;
   categoryName: string;
-  photo?: string;
-  telegramMainAdmin: string;
+  cities: string[];
   weightOptions: Array<{
     weight: string;
     price: string;
   }>;
-  cities: string[];
+  telegramGroup?: string;
+  telegramOperator?: string;
+  telegramReserve?: string;
 }
 
 // URL вашей опубликованной Google Таблицы в формате CSV
@@ -20,23 +22,51 @@ export async function fetchProducts(): Promise<Product[]> {
   try {
     const response = await fetch(SHEET_URL);
     const text = await response.text();
+    console.log('Raw CSV:', text);
     
     // Пропускаем заголовок и разбираем CSV
     const rows = text.split('\n').slice(1);
     return rows.map(row => {
-      const [id, name, description, category, categoryName, photo, telegramMainAdmin, citiesStr, weightOptionsStr] = row.split(',');
+      console.log('First row:', row);
+      const values = row.split(',');
+      console.log('Parsed values:', values);
       
-      return {
+      const [
+        id, name, description, photo, category, categoryName, 
+        citiesStr, weightsStr, pricesStr, 
+        telegramGroup, telegramOperator, telegramReserve
+      ] = values;
+
+      // Парсим веса и цены
+      const weights = weightsStr.split(';').map(w => w.trim()).filter(Boolean);
+      const prices = pricesStr.replace(/["\[\]]/g, '').split(';').map(p => p.trim()).filter(Boolean);
+      
+      const weightOptions = weights.map((weight, index) => ({
+        weight,
+        price: prices[index] || ''
+      }));
+
+      const product = {
         id,
         name,
         description,
+        photo: photo || undefined,
         category,
         categoryName,
-        photo: photo || undefined,
-        telegramMainAdmin,
         cities: citiesStr.split(';').map(city => city.trim()),
-        weightOptions: JSON.parse(weightOptionsStr)
+        weightOptions,
+        telegramGroup: telegramGroup || undefined,
+        telegramOperator: telegramOperator || undefined,
+        telegramReserve: telegramReserve || undefined
       };
+
+      console.log('Contact fields:', { 
+        group: product.telegramGroup, 
+        operator: product.telegramOperator, 
+        reserve: product.telegramReserve 
+      });
+
+      return product;
     });
   } catch (error) {
     console.error('Ошибка при загрузке данных:', error);

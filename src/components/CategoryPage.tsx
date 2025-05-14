@@ -1,11 +1,15 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ShoppingCart, ArrowLeft } from 'lucide-react';
 import { Product, fetchProductsByCategory } from '../api/products';
 
-function CategoryPage() {
-  const { categoryId } = useParams<{ categoryId: string }>();
+export default function CategoryPage() {
+  const params = useParams<{ categoryId: string }>();
+  const categoryId = params.categoryId as string;
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -23,15 +27,16 @@ function CategoryPage() {
     }
   }, [categoryId]);
 
-  const handleOrder = (telegramName: string) => {
-    if (!telegramName) return;
+  const handleOrder = (product: Product) => {
+    if (!product.telegramOperator && !product.telegramGroup) return;
 
+    const contact = product.telegramOperator || product.telegramGroup;
     // Формируем текст сообщения
-    const message = `Здравствуйте! Хочу заказать ${product.name} (${product.weightOptions[0].weight}) - ${product.weightOptions[0].price}`;
+    const message = `Hello!/@${product.name}@/Kolichestvo-${product.weightOptions[0].weight}/Stoimost-${product.weightOptions[0].price}`;
     const encodedMessage = encodeURIComponent(message);
     
     // Формируем URL с сообщением
-    const finalUrl = `https://t.me/${telegramName}?text=${encodedMessage}`;
+    const finalUrl = `https://t.me/${contact}?text=${encodedMessage}`;
     
     window.open(finalUrl, '_blank');
   };
@@ -47,7 +52,7 @@ function CategoryPage() {
         animate={{ opacity: 1, y: 0 }}
         className="category-header"
       >
-        <Link to="/" className="back-link">
+        <Link href="/" className="back-link">
           <ArrowLeft size={20} />
           <span>Назад</span>
         </Link>
@@ -85,9 +90,10 @@ function CategoryPage() {
               </div>
               <motion.button
                 className="order-button"
-                onClick={() => handleOrder(product.telegramOperator || '')}
+                onClick={() => handleOrder(product)}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                disabled={!product.telegramOperator && !product.telegramGroup}
               >
                 <ShoppingCart size={16} />
                 <span>Заказать</span>
@@ -98,6 +104,4 @@ function CategoryPage() {
       </div>
     </div>
   );
-}
-
-export default CategoryPage; 
+} 

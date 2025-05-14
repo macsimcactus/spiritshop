@@ -11,9 +11,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "clean": "rm -rf .next node_modules pnpm-lock.yaml",
-    "reinstall": "pnpm clean && pnpm install",
-    "postinstall": "pnpm install --no-frozen-lockfile"
+    "clean": "rm -rf .next node_modules pnpm-lock.yaml"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
@@ -49,6 +47,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
+    "critters": "^0.0.20",
     "date-fns": "2.30.0",
     "embla-carousel-react": "8.5.1",
     "framer-motion": "^12.11.3",
@@ -79,9 +78,9 @@
     "typescript": "^5"
   },
   "peerDependencies": {
+    "date-fns": "2.30.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "date-fns": "2.30.0"
+    "react-dom": "18.2.0"
   },
   "pnpm": {
     "overrides": {

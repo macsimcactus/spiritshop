@@ -1,6 +1,6 @@
 import type React from "react"
 import "../src/index.css"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Space_Grotesk } from "next/font/google"
 import Header from "@/src/components/Header"
 import { ThemeProvider } from "@/components/ThemeProvider"
@@ -12,14 +12,19 @@ const spaceGrotesk = Space_Grotesk({
   preload: true
 })
 
-export const metadata: Metadata = {
-  title: "Spirit Vietnam",
-  description: "Премиум-доставка ПАВ по Вьетнаму 24/7",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1",
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
     { media: "(prefers-color-scheme: dark)", color: "black" }
   ],
+}
+
+export const metadata: Metadata = {
+  title: "Spirit Vietnam",
+  description: "Премиум-доставка ПАВ по Вьетнаму 24/7",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
