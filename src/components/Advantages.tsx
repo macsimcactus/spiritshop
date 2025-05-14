@@ -1,63 +1,59 @@
+"use client"
 import { motion } from "framer-motion"
-import { Truck, Shield, Clock, Award, ThumbsUp, HeadphonesIcon } from "lucide-react"
+import { Zap, Shield, Clock, Trophy } from "lucide-react"
 
 const advantages = [
   {
-    icon: <Truck size={24} />,
+    icon: Zap,
     title: "Быстрая доставка",
-    description: "Оперативная доставка во все регионы"
+    description: "Доставляем заказы в течение 15 минут после оплаты"
   },
   {
-    icon: <Shield size={24} />,
+    icon: Shield,
     title: "Гарантия качества",
-    description: "Только проверенные товары"
+    description: "Только проверенные товары от надежных поставщиков"
   },
   {
-    icon: <Clock size={24} />,
-    title: "Круглосуточно",
-    description: "Работаем 24/7 без выходных"
+    icon: Clock,
+    title: "Работаем 24/7",
+    description: "Принимаем заказы в любое время дня и ночи"
   },
   {
-    icon: <Award size={24} />,
+    icon: Trophy,
     title: "Лучшие цены",
-    description: "Конкурентные цены на рынке"
-  },
-  {
-    icon: <ThumbsUp size={24} />,
-    title: "Большой выбор",
-    description: "Широкий ассортимент товаров"
-  },
-  {
-    icon: <HeadphonesIcon size={24} />,
-    title: "Поддержка",
-    description: "Оперативные ответы на вопросы"
+    description: "Регулярные акции и специальные предложения"
   }
 ]
 
 export default function Advantages() {
   return (
-    <section className="py-12">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {advantages.map((advantage, index) => (
-            <motion.div
-              key={advantage.title}
-              className="flex items-start p-8 bg-white/5 rounded-xl backdrop-blur-sm h-full"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-            >
-              <div className="flex-shrink-0 mr-6 text-primary">
-                {advantage.icon}
-              </div>
-              <div>
-                <h3 className="text-lg font-semibold text-white mb-3">{advantage.title}</h3>
-                <p className="text-zinc-400">{advantage.description}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+    <div className="container mx-auto px-4">
+      <motion.h2
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-3xl font-bold text-center mb-12 hero-gradient"
+      >
+        Наши преимущества
+      </motion.h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {advantages.map((advantage, index) => (
+          <motion.div
+            key={advantage.title}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1 }}
+            className="glass-card p-6 flex flex-col items-center text-center"
+          >
+            <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center mb-4">
+              {<advantage.icon className="w-6 h-6 text-white" />}
+            </div>
+            <h3 className="text-xl font-semibold mb-2">{advantage.title}</h3>
+            <p className="text-zinc-400">{advantage.description}</p>
+          </motion.div>
+        ))}
       </div>
-    </section>
+    </div>
   )
 } 

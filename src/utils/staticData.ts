@@ -235,16 +235,21 @@ export async function fetchProductsByCategory(category: string): Promise<Product
 }
 
 export async function getCategories(): Promise<Array<{id: string, name: string}>> {
-  const products = await fetchProducts();
-  const categories = new Map<string, string>();
-  
-  products.forEach(product => {
-    if (!categories.has(product.category)) {
-      categories.set(product.category, product.categoryName);
-    }
-  });
-  
-  return Array.from(categories.entries()).map(([id, name]) => ({ id, name }));
+  try {
+    const products = await fetchProducts();
+    const categories = new Map<string, string>();
+    
+    products.forEach(product => {
+      if (!categories.has(product.category)) {
+        categories.set(product.category, product.categoryName);
+      }
+    });
+    
+    return Array.from(categories.entries()).map(([id, name]) => ({ id, name }));
+  } catch (error) {
+    console.error('Ошибка при получении категорий:', error);
+    return [];
+  }
 }
 
 export async function getCities(): Promise<string[]> {
