@@ -12,7 +12,8 @@
     "start": "next start",
     "lint": "next lint",
     "clean": "rm -rf .next node_modules pnpm-lock.yaml",
-    "reinstall": "pnpm clean && pnpm install"
+    "reinstall": "pnpm clean && pnpm install",
+    "postinstall": "pnpm install --no-frozen-lockfile"
   },
   "dependencies": {
     "@emotion/is-prop-valid": "latest",
@@ -48,7 +49,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
-    "date-fns": "^2.30.0",
+    "date-fns": "2.30.0",
     "embla-carousel-react": "8.5.1",
     "framer-motion": "^12.11.3",
     "input-otp": "1.4.1",
@@ -64,15 +65,15 @@
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
-    "vaul": "^0.9.6",
+    "vaul": "0.9.6",
     "zod": "^3.24.1"
   },
   "devDependencies": {
     "@netlify/functions": "^3.1.8",
     "@netlify/plugin-nextjs": "^5.11.1",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "18.2.0",
+    "@types/react-dom": "18.2.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
@@ -80,19 +81,19 @@
   "peerDependencies": {
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "date-fns": "^2.30.0"
+    "date-fns": "2.30.0"
   },
   "pnpm": {
     "overrides": {
       "react": "18.2.0",
       "react-dom": "18.2.0",
-      "date-fns": "^2.30.0"
+      "date-fns": "2.30.0"
     },
     "peerDependencyRules": {
       "allowedVersions": {
         "react": "18.2.0",
         "react-dom": "18.2.0",
-        "date-fns": "^2.30.0"
+        "date-fns": "2.30.0"
       }
     }
   }
