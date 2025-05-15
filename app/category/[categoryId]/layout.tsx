@@ -13,6 +13,11 @@ export const viewport: Viewport = {
   ],
 };
 
+export const metadata: Metadata = {
+  title: "Категория | Spirit Vietnam",
+  description: "Купить товары во Вьетнаме с доставкой 24/7",
+};
+
 export async function generateMetadata({ params }: { params: { categoryId: string } }): Promise<Metadata> {
   try {
     const products = await fetchProductsByCategory(params.categoryId);
