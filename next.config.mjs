@@ -2,13 +2,6 @@
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
-  distDir: '.next',
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -18,9 +11,6 @@ const nextConfig = {
       },
     ],
   },
-  generateBuildId: async () => {
-    return 'build-' + new Date().getTime()
-  },
   webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
@@ -29,10 +19,6 @@ const nextConfig = {
       crypto: false
     };
     return config;
-  },
-  experimental: {
-    optimizeCss: true,
-    scrollRestoration: true,
   }
 }
 

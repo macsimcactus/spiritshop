@@ -1,8 +1,20 @@
 import { ProductData, fetchProductsByCategory, getCategories } from '@/src/utils/staticData';
 import type { Metadata } from 'next';
 
-export const dynamic = 'force-static';
+export const dynamic = 'error';
 export const dynamicParams = false;
+
+export async function generateStaticParams() {
+  try {
+    const categories = await getCategories();
+    return categories.map((category) => ({
+      categoryId: category.id,
+    }));
+  } catch (error) {
+    console.error('Ошибка при генерации статических параметров:', error);
+    return [{ categoryId: 'default' }];
+  }
+}
 
 export async function generateMetadata({ params }: { params: { categoryId: string } }): Promise<Metadata> {
   try {
@@ -21,34 +33,18 @@ export async function generateMetadata({ params }: { params: { categoryId: strin
   }
 }
 
-export async function generateStaticParams() {
-  try {
-    const categories = await getCategories();
-    return categories.map((category) => ({
-      categoryId: category.id,
-    }));
-  } catch (error) {
-    console.error('Ошибка при генерации статических параметров:', error);
-    return [];
-  }
-}
-
-async function getData(categoryId: string) {
-  try {
-    const products = await fetchProductsByCategory(categoryId);
-    return { products };
-  } catch (error) {
-    console.error('Ошибка при загрузке продуктов:', error);
-    return { products: [] };
-  }
-}
-
 export default async function CategoryPage({
   params
 }: {
   params: { categoryId: string }
 }) {
-  const { products } = await getData(params.categoryId);
+  let products: ProductData[] = [];
+  
+  try {
+    products = await fetchProductsByCategory(params.categoryId);
+  } catch (error) {
+    console.error('Ошибка при загрузке продуктов:', error);
+  }
 
   return (
     <div className="min-h-screen pt-28 pb-16">
