@@ -22,44 +22,13 @@ const nextConfig = {
   generateBuildId: async () => {
     return 'build-' + new Date().getTime()
   },
-  webpack: (config, { isServer }) => {
-    // Добавляем fallback для node модулей
+  webpack: (config) => {
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
       path: false,
       crypto: false
     };
-
-    if (!isServer) {
-      config.optimization.splitChunks = {
-        chunks: 'all',
-        cacheGroups: {
-          default: false,
-          vendors: false,
-          commons: {
-            name: 'commons',
-            chunks: 'all',
-            minChunks: 2,
-            reuseExistingChunk: true,
-          },
-          lib: {
-            test: /[\\/]node_modules[\\/]/,
-            name(module, chunks, cacheGroupKey) {
-              const moduleFileName = module
-                .identifier()
-                .split('/')
-                .reduceRight((item) => item);
-              return `${cacheGroupKey}-${moduleFileName}`;
-            },
-            chunks: 'all',
-            minChunks: 2,
-            reuseExistingChunk: true,
-          },
-        },
-      };
-    }
-
     return config;
   },
   experimental: {
