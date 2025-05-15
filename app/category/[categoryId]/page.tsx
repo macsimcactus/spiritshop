@@ -5,40 +5,7 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ShoppingCart, ArrowLeft } from 'lucide-react';
-import { ProductData, fetchProductsByCategory, getCategories } from '@/src/utils/staticData';
-import LoadingProducts from '@/src/components/LoadingProducts';
-import type { Metadata, Viewport } from "next"
-
-// Устанавливаем время для revalidate
-export const revalidate = 3600 // каждый час
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" }
-  ],
-}
-
-export async function generateMetadata({ params }: { params: { categoryId: string } }): Promise<Metadata> {
-  const products = await fetchProductsByCategory(params.categoryId)
-  const categoryName = products[0]?.categoryName || "Категория"
-  
-  return {
-    title: `${categoryName} | Spirit Vietnam`,
-    description: `Купить ${categoryName.toLowerCase()} во Вьетнаме с доставкой 24/7`,
-  }
-}
-
-// Генерируем статические пути для всех категорий
-export async function generateStaticParams() {
-  const categories = await getCategories()
-  return categories.map((category: { id: string }) => ({
-    categoryId: category.id,
-  }))
-}
+import { ProductData, fetchProductsByCategory } from '@/src/utils/staticData';
 
 export default function CategoryPage() {
   const params = useParams<{ categoryId: string }>();
@@ -62,7 +29,21 @@ export default function CategoryPage() {
   }, [categoryId]);
 
   if (loading) {
-    return <LoadingProducts />;
+    return (
+      <div className="min-h-screen pt-28 pb-16">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-white"
+            >
+              Загрузка...
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
