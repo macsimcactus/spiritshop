@@ -1,7 +1,25 @@
 import { ProductData, fetchProductsByCategory, getCategories } from '@/src/utils/staticData';
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-static';
 export const dynamicParams = false;
+
+export async function generateMetadata({ params }: { params: { categoryId: string } }): Promise<Metadata> {
+  try {
+    const products = await fetchProductsByCategory(params.categoryId);
+    const categoryName = products[0]?.categoryName || "Категория";
+    
+    return {
+      title: `${categoryName} | Spirit Vietnam`,
+      description: `Купить ${categoryName.toLowerCase()} во Вьетнаме с доставкой 24/7`,
+    };
+  } catch (error) {
+    return {
+      title: "Категория | Spirit Vietnam",
+      description: "Купить товары во Вьетнаме с доставкой 24/7",
+    };
+  }
+}
 
 export async function generateStaticParams() {
   try {
