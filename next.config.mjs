@@ -10,13 +10,11 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
-    domains: [
-      'placeholder.com',
-      'postimages.org',
-      'i.postimg.cc',
-      'postimg.cc',
-      'i.postimg.org',
-      'postimg.org'
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
     ],
   },
   generateBuildId: async () => {

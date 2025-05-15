@@ -1,4 +1,4 @@
-import { getCategories } from '@/src/utils/staticData';
+import { getCategories, fetchProductsByCategory } from '@/src/utils/staticData';
 import type { Metadata, Viewport } from "next";
 
 export const revalidate = 3600; // каждый час
@@ -14,17 +14,32 @@ export const viewport: Viewport = {
 };
 
 export async function generateMetadata({ params }: { params: { categoryId: string } }): Promise<Metadata> {
-  return {
-    title: `Категория | Spirit Vietnam`,
-    description: `Купить товары во Вьетнаме с доставкой 24/7`,
-  };
+  try {
+    const products = await fetchProductsByCategory(params.categoryId);
+    const categoryName = products[0]?.categoryName || "Категория";
+    
+    return {
+      title: `${categoryName} | Spirit Vietnam`,
+      description: `Купить ${categoryName.toLowerCase()} во Вьетнаме с доставкой 24/7`,
+    };
+  } catch (error) {
+    return {
+      title: "Категория | Spirit Vietnam",
+      description: "Купить товары во Вьетнаме с доставкой 24/7",
+    };
+  }
 }
 
 export async function generateStaticParams() {
-  const categories = await getCategories();
-  return categories.map((category: { id: string }) => ({
-    categoryId: category.id,
-  }));
+  try {
+    const categories = await getCategories();
+    return categories.map((category) => ({
+      categoryId: category.id,
+    }));
+  } catch (error) {
+    console.error('Ошибка при генерации статических параметров:', error);
+    return [];
+  }
 }
 
 export default function CategoryLayout({
@@ -32,5 +47,5 @@ export default function CategoryLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return <>{children}</>;
 } 
